@@ -2,7 +2,7 @@ import json
 from request import list_archives
 
 
-def export_archive(token, token_type = "Basic", file_name = "exported_archives.json"):
+def export_archive(token, token_type = "Basic", file_name = "exported_archives.json"): #function to export your whole archive
     with open(file_name, "w") as file:
         exporting = True
         page_id = ""
