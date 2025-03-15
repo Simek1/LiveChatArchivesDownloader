@@ -23,6 +23,8 @@ def list_archives(token, authorization_type = "Basic", page_id = ""):
             "page_id": page_id
         }
     response = requests.post(url, headers=headers, json=data)
-    print(response.status_code)
+
+    return (response.status_code, response.json())
+
 
 
