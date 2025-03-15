@@ -18,3 +18,5 @@ def export_archive(token, token_type = "Basic", file_name = "exported_archives.j
             else:
                 print(f"API call has returned {response[0]} status")
                 exporting = False
+
+#if you're using the PAT authorization, then you need only to provide your token to the function, e.g. export_archive(your_token)
