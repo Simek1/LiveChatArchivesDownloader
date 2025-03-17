@@ -18,7 +18,7 @@ def list_archives(token, authorization_type = "Basic", page_id = ""): #single li
                 }
             }
         }
-    else: 
+    else: #if a page_id is given then don't create a new request, just switch to the next page
         data = {
             "page_id": page_id
         }
