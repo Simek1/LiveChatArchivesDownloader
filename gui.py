@@ -1,5 +1,6 @@
 import wx
 from export_archive import export_archive
+import threading
 
 class DownloaderWindow(wx.Frame):
     def __init__(self):
@@ -12,13 +13,35 @@ class DownloaderWindow(wx.Frame):
         self.token_types = ["Basic", "Bearer"]
         self.token_type_choice = wx.Choice(panel, pos=(75, 60), size=(200,25), choices=self.token_types)
         self.status_label = wx.StaticText(panel, pos=(0, 145), label="")
-
+        self.loader = wx.ActivityIndicator(panel, pos=(220, 110))
+        self.loader.Start()
+        self.loader.Hide()
         self.export_button.Bind(wx.EVT_BUTTON, self.on_export_button_click)
+
+        self.exporting = False
         
         self.Center()
         self.Show()
 
     def on_export_button_click(self, event):
+        if self.exporting:
+            self.status_label.SetLabel("Archive is already being exported")
+            status_label_size = self.status_label.GetSize()
+            status_label_old_pos = self.status_label.GetPosition()
+            if status_label_size[0] > 300:
+                self.status_label.SetPosition((0, status_label_old_pos[1]))
+            else:
+                new_x_pos = int((300 - status_label_size[0]) / 2)
+                self.status_label.SetPosition((new_x_pos, status_label_old_pos[1]))
+        else:
+            self.loader.Show()
+            thread = threading.Thread(target=self.export_thread)
+            thread.start()
+            
+
+            
+    def export_thread(self):
+        self.exporting = True
         token = self.token_input.GetValue()
         token_type = self.token_type_choice.GetStringSelection()
         status = export_archive(token, token_type=token_type)
@@ -35,6 +58,8 @@ class DownloaderWindow(wx.Frame):
         else:
             new_x_pos = int((300 - status_label_size[0]) / 2)
             self.status_label.SetPosition((new_x_pos, status_label_old_pos[1]))
+        self.exporting = False
+        self.loader.Hide()
 
 if __name__ == "__main__":
     app = wx.App(False)
