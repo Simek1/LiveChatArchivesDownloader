@@ -2,3 +2,7 @@
 .env
 /__pycache__
 *.json
+/build
+/dist
+LiveChatArchiveDownloader.spec
+.DS_Store
